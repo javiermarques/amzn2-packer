@@ -1,0 +1,64 @@
+{
+    "variables": {
+        "source_path": "amzn2.ova",
+        "memory": "2048",
+        "cpu_cores": "4",
+        "home": "{{env `HOME`}}"
+    },
+    "builders": [
+    {
+      "type": "virtualbox-ovf",
+      "source_path": "{{user `source_path`}}",
+      "shutdown_command": "echo 'packer' | sudo -S shutdown -P now",
+      "boot_wait": "5s",
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_private_key_file": "{{ user `home`}}/.ssh/vagrant.key",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "15m",
+      "vboxmanage": [
+                [
+                  "storageattach",
+                  "{{.Name}}",
+                  "--storagectl",
+                  "IDE",
+                  "--port",
+                  "0",
+                  "--device",
+                  "1",
+                  "--type",
+                  "dvddrive",
+                  "--medium",
+                  "{{template_dir}}/seed.iso"
+                ],
+                [
+                  "modifyvm",
+                  "{{.Name}}",
+                  "--memory",
+                  "{{ user `memory`}}"
+                ],
+                [
+                  "modifyvm",
+                  "{{.Name}}",
+                  "--cpus",
+                  "{{ user `cpu_cores`}}"
+                ]
+            ],
+      "virtualbox_version_file": ".vbox_version",
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso"
+    }],
+    "provisioners": [{
+      "type": "shell",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "scripts": [
+        "vboxguest.sh"
+      ]
+    }],
+    "post-processors": [
+      {
+        "type": "vagrant",
+        "keep_input_artifact": false,
+        "output": "amzn2_{{.Provider}}.box"
+      }
+    ]
+}

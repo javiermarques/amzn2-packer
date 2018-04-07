@@ -1,0 +1,16 @@
+local-hostname: amazonlinux
+
+# eth0 is the default network interface enabled in the image. You can configure static network settings with an entry like below.
+#network-interfaces: |
+#  iface eth0 inet static
+#  address 192.168.1.10
+#  network 192.168.1.0
+#  netmask 255.255.255.0
+#  broadcast 192.168.1.255
+#  gateway 192.168.1.254
+network-interfaces: |
+    BOOTPROTO=dhcp
+    DEVICE=eth0
+    ONBOOT=yes
+    TYPE=Ethernet
+    USERCTL=no

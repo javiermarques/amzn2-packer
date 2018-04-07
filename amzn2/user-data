@@ -1,0 +1,20 @@
+#cloud-config
+# vim:syntax=yaml
+users:
+# A user by the name ec2-user is created in the image by default.
+  - default
+# The following entry creates user1 and assigns a plain text password.
+# Please note that the use of a plain text password is not recommended from security best practises standpoint.
+  - name: vagrant
+    groups: sudo
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    plain_text_passwd: vagrant
+    lock_passwd: false
+    ssh-authorized-keys:
+            - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key
+
+
+chpasswd:
+  list: |
+    ec2-user:ec2-user
+# In the above line, do not add any spaces after 'ec2-user:'.
